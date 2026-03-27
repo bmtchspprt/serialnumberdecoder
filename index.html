@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -115,17 +115,6 @@
 
         .btn-clear:hover {
             background: #5a6268;
-        }
-
-        .btn-examples {
-            background: #28a745;
-            color: white;
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        .btn-examples:hover {
-            background: #218838;
         }
 
         .results-section {
@@ -260,70 +249,6 @@
             padding: 40px;
         }
 
-        .examples-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            padding: 20px;
-        }
-
-        .examples-content {
-            background: white;
-            max-width: 700px;
-            margin: 50px auto;
-            padding: 30px;
-            border-radius: 15px;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .examples-content h2 {
-            color: #2c3e50;
-            margin-bottom: 20px;
-        }
-
-        .example-item {
-            background: #f8f9fa;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .example-item:hover {
-            background: #e9ecef;
-            transform: translateX(5px);
-        }
-
-        .example-serial {
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-            color: #667eea;
-            font-size: 16px;
-            margin-bottom: 5px;
-        }
-
-        .example-desc {
-            color: #6c757d;
-            font-size: 14px;
-        }
-
-        .close-btn {
-            background: #dc3545;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-
         @media (max-width: 768px) {
             .input-group {
                 flex-direction: column;
@@ -342,14 +267,13 @@
             <div class="input-section">
                 <h3>Enter Serial Number</h3>
                 <div class="input-hint">
-                    Enter any serial number: NCR-86 (12 chars), CNCR, or other product types
+                    NCR-86: bare code, or prefix <code>NR</code>, <code>NCR</code>, <code>NR86</code>, <code>NCR86</code>, <code>NR.2SW</code>, <code>NCR.2SW</code>, <code>NR86.2SW</code>, <code>NCR86.2SW</code> / <code>NCR-86.2SW</code>, or a stray leading <code>C</code>. Hyphens/dashes/spaces are ignored. CNCR: e.g. <code>CNCR-190.FRXXXMBWB</code>. Other prefixes use the product tree.
                 </div>
                 <div class="input-group">
                     <input type="text" id="serialInput" placeholder="Enter serial number here..." autofocus>
                     <button class="btn-decode" onclick="decodeSerial()">Decode</button>
                     <button class="btn-clear" onclick="clearResults()">Clear</button>
                 </div>
-                <button class="btn-examples" onclick="showExamples()">📋 Show Examples</button>
             </div>
 
             <div class="results-section">
@@ -360,40 +284,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div class="examples-modal" id="examplesModal">
-        <div class="examples-content">
-            <h2>Example Serial Numbers</h2>
-            <p style="color: #6c757d; margin-bottom: 20px;">Click on any example to use it:</p>
-            
-            <div class="example-item" onclick="useExample('XXBXAA8MAXCE')">
-                <div class="example-serial">XXBXAA8MAXCE</div>
-                <div class="example-desc">Basic configuration with no mounting</div>
-            </div>
-
-            <div class="example-item" onclick="useExample('GMBXAA8MAHAE')">
-                <div class="example-serial">GMBXAA8MAHAE</div>
-                <div class="example-desc">Flanged configuration for standard use</div>
-            </div>
-
-            <div class="example-item" onclick="useExample('CLHKAFWQKIE')">
-                <div class="example-serial">CLHKAFWQKIE</div>
-                <div class="example-desc">Hygienic configuration with rinsing connection</div>
-            </div>
-
-            <div class="example-item" onclick="useExample('XKTXAU8MHPAX')">
-                <div class="example-serial">XKTXAU8MHPAX</div>
-                <div class="example-desc">Threaded configuration for non-EX environment</div>
-            </div>
-
-            <div class="example-item" onclick="useExample('GPFXABVNXYIJ')">
-                <div class="example-serial">GPFXABVNXYIJ</div>
-                <div class="example-desc">High-temperature configuration</div>
-            </div>
-
-            <button class="close-btn" onclick="hideExamples()">Close</button>
         </div>
     </div>
 
@@ -980,268 +870,8 @@
                 ]
             },
             "CNCR": {
-                product_type: "CNCR-100",
-                all_rows: [
-                    {
-                        "Column11": "CNCR-110 26 ft (8 M) 4-20 mA (top cable connection)",
-                        "Column2": ".",
-                        "Model Type": "CNCR-110",
-                    },
-                    {
-                        "Column11": "CNCR-120 49 ft (15 M) 4-20 mA & Modbus (top cable connection)",
-                        "Column2": ".",
-                        "Model Type": "CNCR-120",
-                    },
-                    {
-                        "Column11": "CNCR-130 49 ft (15 M) 4-20 mA & Modbus (side cable connection)",
-                        "Column2": ".",
-                        "Model Type": "CNCR-130",
-                    },
-                    {
-                        "Column11": "CNCR-190 98 ft (30 M) 4-20 mA & Modbus (top cable connection)",
-                        "Column2": ".",
-                        "Model Type": "CNCR-190",
-                    },
-                    {
-                        "Column3": "Approvals",
-                        "Model Type": "↓",
-                    },
-                    {
-                        "Column11": "Unclassified area, non-EX environment, general purpose FM/CSA/CE",
-                        "Column3": "XX",
-                        "Model Type": "|",
-                    },
-                    {
-                        "Column11": "FM/CSA/ATEX/ICEx Class I, II, III",
-                        "Column3": "VH",
-                        "Model Type": "|",
-                    },
-                    {
-                        "Column11": "ATEX/ICEx Zone 1, 1/2",
-                        "Column3": "VB",
-                        "Model Type": "|",
-                    },
-                    {
-                        "Column11": "c-FM-us/c-CSA-us; Gas, encapsulation, Zone 1, 2 (Class I Division 2) + Dust, protection by enclosure, Zone 20, 20/21, 21, 22 (Class II, III Division 1)",
-                        "Column3": "FB",
-                        "Model Type": "|",
-                    },
-                    {
-                        "Column11": "c-FM-us/c-CSA-us; Gas, non-incendive, Class I Division 2 + Dust-ignition proof, Class II, III Division 1",
-                        "Column3": "FR",
-                        "Model Type": "|",
-                    },
-                    {
-                        "Column3": "↓",
-                        "Column4": "Mounting",
-                        "Model Type": "|",
-                    },
-                    {
-                        "Column11": "1.5” Threaded NPT",
-                        "Column3": "|",
-                        "Column7": "N",
-                        "Model Type": "|",
-                    },
-                    {
-                        "Column11": "1.5” Threaded straight",
-                        "Column3": "|",
-                        "Column7": "G",
-                        "Model Type": "|",
-                    },
-                    {
-                        "Column11": "1.0” Threaded NPT (CNCR-190)",
-                        "Column3": "|",
-                        "Column7": "M",
-                        "Model Type": "|",
-                    },
-                    {
-                        "Column11": "1.0” Threaded straight (CNCR-190)",
-                        "Column3": "|",
-                        "Column7": "F",
-                        "Model Type": "|",
-                    },
-                    {
-                        "Column12": "In price book pages the output and connection sections need to swap order. Connection first, output second.",
-                        "Column3": "|",
-                        "Column7": "↓",
-                        "Column8": "Connection",
-                        "Model Type": "|",
-                    },
-                    {
-                        "Column11": "16 ft (5 m) polyurethane pigtail (not available on CNCR-110)",
-                        "Column3": "|",
-                        "Column7": "|",
-                        "Column8": "A",
-                        "Model Type": "|",
-                    },
-                    {
-                        "Column11": "32 ft (10 m) polyurethane pigtail",
-                        "Column3": "|",
-                        "Column7": "|",
-                        "Column8": "B",
-                        "Model Type": "|",
-                    },
-                    {
-                        "Column11": "82 ft (25 m) polyurethane pigtail (not available on CNCR-110)",
-                        "Column3": "|",
-                        "Column7": "|",
-                        "Column8": "C",
-                        "Model Type": "|",
-                    },
-                    {
-                        "Column11": "Note:  A&C not available for CNCR-110",
-                        "Column3": "|",
-                        "Column7": "|",
-                        "Column8": "|",
-                        "Model Type": "|",
-                    },
-                    {
-                        "Column3": "|",
-                        "Column7": "|",
-                        "Column8": "↓",
-                        "Column9": "Output",
-                        "Model Type": "|",
-                    },
-                    {
-                        "Column11": "Two wire 4-20mA / HART®; 12-35V DC (No HART on CNCR-110)",
-                        "Column3": "|",
-                        "Column7": "|",
-                        "Column8": "|",
-                        "Column9": "H",
-                        "Model Type": "|",
-                    },
-                    {
-                        "Column11": "Four-wire Modbus; 8-30V DC",
-                        "Column3": "|",
-                        "Column7": "|",
-                        "Column8": "|",
-                        "Column9": "W",
-                        "Model Type": "|",
-                    },
-                    {
-                        "Column10": "↓",
-                        "Column3": "↓",
-                        "Column4": "↓",
-                        "Column5": "↓",
-                        "Column6": "↓",
-                        "Column7": "↓",
-                        "Column8": "↓",
-                        "Column9": "↓",
-                        "Model Type": "↓",
-                    },
-                    {
-                        "Column10": "B",
-                        "Column11": "Example Part Number",
-                        "Column2": ".",
-                        "Column3": "XX",
-                        "Column4": "X",
-                        "Column5": "X",
-                        "Column6": "X",
-                        "Column7": "N",
-                        "Column8": "A",
-                        "Column9": "H",
-                        "Model Type": "CNCR-110",
-                    },
-                    {
-                        "Column11": "CNCR-210 26 ft (8 M) 4-20 mA",
-                        "Column2": ".",
-                        "Model Type": "CNCR-210",
-                    },
-                    {
-                        "Column11": "CNCR-220 49 ft (15 M) 4-20 mA",
-                        "Column2": ".",
-                        "Model Type": "CNCR-220",
-                    },
-                    {
-                        "Column11": "CNCR-230 49 ft (15 M) 4-20 mA with Display",
-                        "Column2": ".",
-                        "Model Type": "CNCR-230",
-                    },
-                    {
-                        "Column3": "Approvals",
-                        "Model Type": "↓",
-                    },
-                    {
-                        "Column11": "Unclassified area, non-EX environment, general purpose FM/CSA/CE",
-                        "Column3": "XX",
-                        "Model Type": "|",
-                    },
-                    {
-                        "Column11": "ATEX/UKEX/IEC/c-FM-us/c-CSA-us; Gas, intrinsic safety, Zone 0, 0/1, 1, 2 (Class I Division 1, 2)",
-                        "Column3": "VC",
-                        "Model Type": "|",
-                    },
-                    {
-                        "Column3": "↓",
-                        "Column4": "Mounting",
-                        "Model Type": "|",
-                    },
-                    {
-                        "Column11": "1.5\" Threaded NPT",
-                        "Column3": "|",
-                        "Column7": "N",
-                        "Model Type": "|",
-                    },
-                    {
-                        "Column11": "1.5\" Threaded Straight",
-                        "Column3": "|",
-                        "Column7": "G",
-                        "Model Type": "|",
-                    },
-                    {
-                        "Column12": "In price book pages the output and connection sections need to swap order. Connection first, output second.",
-                        "Column3": "|",
-                        "Column7": "↓",
-                        "Column8": "Connection",
-                        "Model Type": "|",
-                    },
-                    {
-                        "Column11": "Cable Entry:  One 1/2\" NPT without plug",
-                        "Column3": "|",
-                        "Column7": "|",
-                        "Column8": "Q",
-                        "Model Type": "|",
-                    },
-                    {
-                        "Column3": "|",
-                        "Column7": "|",
-                        "Column8": "↓",
-                        "Column9": "Output",
-                        "Model Type": "|",
-                    },
-                    {
-                        "Column11": "Two wire 4-20mA / HART®; 12-35V DC (No HART on CNCR-210)",
-                        "Column3": "|",
-                        "Column7": "|",
-                        "Column8": "|",
-                        "Column9": "H",
-                        "Model Type": "|",
-                    },
-                    {
-                        "Column10": "↓",
-                        "Column3": "↓",
-                        "Column4": "↓",
-                        "Column5": "↓",
-                        "Column6": "↓",
-                        "Column7": "↓",
-                        "Column8": "↓",
-                        "Column9": "↓",
-                        "Model Type": "↓",
-                    },
-                    {
-                        "Column10": "B",
-                        "Column11": "Example Part Number",
-                        "Column2": ".",
-                        "Column3": "XX",
-                        "Column4": "X",
-                        "Column5": "X",
-                        "Column6": "X",
-                        "Column7": "N",
-                        "Column8": "Q",
-                        "Column9": "H",
-                        "Model Type": "CNCR-110",
-                    },
-                ]
+                product_type: "CNCR",
+                all_rows: [],
             },
             "GW2": {
                 product_type: "GW2",
@@ -5415,6 +5045,332 @@
             },
         };
 
+        // CNCR (compact radar) — codes from PriceBook-2024-MASTER-v90 (CNCR-100 / CNCR-200 sections). No pricing.
+        const CNCR_DATA = {
+            version: {
+                "110": "CNCR-110 — 26 ft (8 m) 4-20 mA (top cable connection)",
+                "120": "CNCR-120 — 49 ft (15 m) 4-20 mA & Modbus (top cable connection)",
+                "130": "CNCR-130 — 49 ft (15 m) 4-20 mA & Modbus (side cable connection)",
+                "190": "CNCR-190 — 98 ft (30 m) 4-20 mA & Modbus (top cable connection)",
+                "210": "CNCR-210 — 26 ft (8 m) 4-20 mA",
+                "220": "CNCR-220 — 49 ft (15 m) 4-20 mA / HART",
+                "230": "CNCR-230 — 49 ft (15 m) 4-20 mA with Display / HART",
+            },
+            approvals100: {
+                "XX": "Unclassified area, non-EX environment, general purpose FM/CSA/CE",
+                "VH": "ATEX/IEC/c-FM-us/c-CSA-us; gas, intrinsic safety, Zone 0, 0/1, 1, 2 (Class I Division 1, 2) + Dust, intrinsic safety, Zone 20, 20/21, 21, 22 (Class II, III Division 1, 2) (CNCR 120, 130, 190) for 2-wire non-Modbus units",
+                "VB": "ATEX/IEC; gas, encapsulation, Zone 1, 1/2, 2 + Dust, protection through housing, Zone 20, 21/22, 21, 22 (CNCR 120, 130, 190)",
+                "FB": "c-FM-us/c-CSA-us; gas, encapsulation, Zone 1, 2 (Class I Division 2) + Dust, protection by enclosure, Zone 20, 20/21, 21, 22 (Class II, III Division 1) for Modbus units",
+                "FR": "c-FM-us/c-CSA-us; gas, non-incendive, Class I Division 2 + dust-ignition proof, Class II, III Division 1",
+            },
+            approvals200: {
+                "XX": "Unclassified area, non-EX environment, general purpose FM/CSA/CE",
+                "VC": "CSA-US, Class I, Div 1, 2 (220, 230 only)",
+            },
+            mount100: {
+                "N": "1-1/2\" threaded NPT",
+                "G": "1-1/2\" threaded straight",
+                "M": "1.0\" threaded NPT (CNCR-190 only)",
+                "F": "1.0\" threaded straight (CNCR-190 only)",
+            },
+            conn100: {
+                "A": "16 ft (5 m) polyurethane pigtail (not available on CNCR-110)",
+                "B": "32 ft (10 m) polyurethane pigtail",
+                "C": "82 ft (25 m) polyurethane pigtail (not available on CNCR-110)",
+            },
+            out100: {
+                "H": "Two wire 4-20 mA / HART; 12–35 V DC (no HART on CNCR-110)",
+                "W": "Four-wire Modbus; 8–30 V DC",
+            },
+            mount200: {
+                "N": "1-1/2\" threaded NPT",
+                "G": "1-1/2\" threaded straight",
+            },
+            conn200: {
+                "Q": "Cable entry: one 1/2\" NPT without plug",
+            },
+            out200: {
+                "H": "Two wire 4-20 mA / HART; 12–35 V DC (no HART on CNCR-210)",
+            },
+        };
+
+        function cncrFamilyForModel(model) {
+            if (["110", "120", "130", "190"].includes(model)) return "100";
+            if (["210", "220", "230"].includes(model)) return "200";
+            return null;
+        }
+
+        /**
+         * Quote-style part numbers: CNCR-190.FRXXXMBWB (model, dot, approval, X filler, mount+conn+out, optional suffix).
+         * Also: CNCR190FRXXXMBWB (no dot, no hyphen before model).
+         */
+        function parseCNCRQuotedForm(upperCompact) {
+            let m = upperCompact.match(/^CNCR-?(\d{3})\.([A-Z]+)$/i);
+            if (m) {
+                const model = m[1];
+                const rest = m[2];
+                return cncrParseQuoteRest(model, rest);
+            }
+            m = upperCompact.match(/^CNCR-?(\d{3})([A-Z]{2})(X+)([A-Z]{3,})$/i);
+            if (m) {
+                const model = m[1];
+                const approval = m[2];
+                const tail = m[4];
+                return {
+                    model,
+                    approval,
+                    mount: tail[0],
+                    conn: tail[1],
+                    out: tail[2],
+                    extra: tail.slice(3),
+                };
+            }
+            return null;
+        }
+
+        function cncrParseQuoteRest(model, rest) {
+            rest = rest.toUpperCase();
+            let r = rest.match(/^([A-Z]{2})(X+)([A-Z]{3,})$/);
+            if (r) {
+                const approval = r[1].toUpperCase();
+                const tail = r[3].toUpperCase();
+                return {
+                    model,
+                    approval,
+                    mount: tail[0],
+                    conn: tail[1],
+                    out: tail[2],
+                    extra: tail.slice(3),
+                };
+            }
+            r = rest.match(/^([A-Z]{2})([A-Z])([A-Z])([A-Z])([A-Z]*)$/);
+            if (r) {
+                return {
+                    model,
+                    approval: r[1],
+                    mount: r[2],
+                    conn: r[3],
+                    out: r[4],
+                    extra: r[5] || "",
+                };
+            }
+            return null;
+        }
+
+        function parseCNCRSerial(originalSerial, cleanedSerial) {
+            const upperOrig = originalSerial.trim().toUpperCase();
+            if (!upperOrig.includes("CNCR")) {
+                return { error: "CNCR serial numbers must contain “CNCR”." };
+            }
+
+            const upperCompact = upperOrig.replace(/\s+/g, "");
+            const compactNoSep = upperOrig.replace(/[\s.\-_/]/g, "").toUpperCase();
+            const quoted = parseCNCRQuotedForm(upperCompact) || parseCNCRQuotedForm(compactNoSep);
+            if (quoted) {
+                const v = validateCNCRParts(quoted.approval, quoted.model, quoted.mount, quoted.conn, quoted.out);
+                if (v.error) return v;
+                if (quoted.extra && quoted.extra.length) {
+                    v.warnings = v.warnings || [];
+                    v.warnings.push(`Additional characters in quote after output (not decoded): ${quoted.extra}`);
+                }
+                return v;
+            }
+
+            const hyphenParts = upperOrig.split(/[\s\-]+/).filter((p) => p.length > 0);
+            let tail = [];
+            if (hyphenParts[0] === "CNCR") {
+                tail = hyphenParts.slice(1);
+            } else if (hyphenParts[0].startsWith("CNCR")) {
+                const rest = hyphenParts[0].replace(/^CNCR/, "");
+                tail = rest ? [rest, ...hyphenParts.slice(1)] : hyphenParts.slice(1);
+            } else {
+                return { error: "CNCR serial must start with CNCR." };
+            }
+
+            if (tail.length >= 5) {
+                let approval, model, mount, conn, outc;
+                if (/^\d{3}$/.test(tail[0])) {
+                    model = tail[0];
+                    approval = tail[1];
+                    mount = tail[2];
+                    conn = tail[3];
+                    outc = tail[4];
+                } else if (/^[A-Z]{2}$/.test(tail[0])) {
+                    approval = tail[0];
+                    model = tail[1];
+                    mount = tail[2];
+                    conn = tail[3];
+                    outc = tail[4];
+                } else {
+                    return { error: "Could not read CNCR fields after CNCR (use e.g. CNCR-110-XX-N-A-H or CNCR-XX-110-N-A-H)." };
+                }
+                return validateCNCRParts(approval, model, mount, conn, outc);
+            }
+
+            let s = cleanedSerial.replace(/[^A-Z0-9]/gi, "").toUpperCase();
+            const cidx = s.indexOf("CNCR");
+            if (cidx >= 0) s = s.slice(cidx + 4);
+            s = s.replace(/^\.+/, "");
+
+            if (s.length < 8) {
+                return { error: "CNCR configuration is too short. Expected approval (2) + model (3) + mount (1) + connection (1) + output (1), e.g. XX110NAH or 110XXNAH after CNCR." };
+            }
+
+            let approval, model, mount, conn, outc;
+            if (/^\d{3}/.test(s)) {
+                model = s.slice(0, 3);
+                approval = s.slice(3, 5);
+                mount = s.slice(5, 6);
+                conn = s.slice(6, 7);
+                outc = s.slice(7, 8);
+            } else if (/^[A-Z]{2}/.test(s)) {
+                approval = s.slice(0, 2);
+                model = s.slice(2, 5);
+                mount = s.slice(5, 6);
+                conn = s.slice(6, 7);
+                outc = s.slice(7, 8);
+            } else {
+                return { error: "Could not parse CNCR codes after CNCR." };
+            }
+            return validateCNCRParts(approval, model, mount, conn, outc);
+        }
+
+        function validateCNCRParts(approval, model, mount, conn, outc) {
+            const warnings = [];
+            const fam = cncrFamilyForModel(model);
+            if (!fam) {
+                return { error: `Unknown CNCR model code “${model}”. Valid: 110, 120, 130, 190, 210, 220, 230.` };
+            }
+
+            const versionLabel = CNCR_DATA.version[model];
+            if (!versionLabel) {
+                return { error: `No description for model ${model}.` };
+            }
+
+            if (fam === "100") {
+                if (!CNCR_DATA.approvals100[approval]) {
+                    return { error: `Invalid approvals code “${approval}” for CNCR-100 family. Valid: ${Object.keys(CNCR_DATA.approvals100).join(", ")}.` };
+                }
+                if (!CNCR_DATA.mount100[mount]) {
+                    return { error: `Invalid mounting code “${mount}” for CNCR-100. Valid: N, G, M, F.` };
+                }
+                if ((mount === "M" || mount === "F") && model !== "190") {
+                    warnings.push("Codes M and F apply only to CNCR-190.");
+                }
+                if (!CNCR_DATA.conn100[conn]) {
+                    return { error: `Invalid connection code “${conn}” for CNCR-100. Valid: A, B, C.` };
+                }
+                if (!CNCR_DATA.out100[outc]) {
+                    return { error: `Invalid output code “${outc}” for CNCR-100. Valid: H, W.` };
+                }
+                if (model === "110" && (conn === "A" || conn === "C")) {
+                    warnings.push("16 ft and 82 ft pigtails (A/C) are not available on CNCR-110.");
+                }
+            } else {
+                if (!CNCR_DATA.approvals200[approval]) {
+                    return { error: `Invalid approvals code “${approval}” for CNCR-200 family. Valid: ${Object.keys(CNCR_DATA.approvals200).join(", ")}.` };
+                }
+                if (approval === "VC" && model === "210") {
+                    warnings.push("Approval VC is listed for 220 and 230 only in the price book.");
+                }
+                if (!CNCR_DATA.mount200[mount]) {
+                    return { error: `Invalid mounting code “${mount}” for CNCR-200. Valid: N, G.` };
+                }
+                if (!CNCR_DATA.conn200[conn]) {
+                    return { error: `Invalid connection code “${conn}” for CNCR-200. Valid: Q.` };
+                }
+                if (!CNCR_DATA.out200[outc]) {
+                    return { error: `Invalid output code “${outc}” for CNCR-200. Valid: H.` };
+                }
+            }
+
+            return {
+                family: fam,
+                model,
+                approval,
+                mount,
+                conn,
+                out: outc,
+                warnings,
+            };
+        }
+
+        function cncrWireAndProtocol(outDesc) {
+            let wireCount = "";
+            let protocol = "";
+            if (/four-?wire|four wire/i.test(outDesc)) wireCount = "4 Wire";
+            else if (/two-?wire|two wire/i.test(outDesc)) wireCount = "2 Wire";
+            if (/modbus/i.test(outDesc)) protocol = "Modbus";
+            else if (/hart/i.test(outDesc)) protocol = "HART";
+            else if (/4-20|4–20/i.test(outDesc)) protocol = "4-20 Analog";
+            else protocol = "—";
+            return { wireCount, protocol };
+        }
+
+        function showCNCRDecoded(originalSerial, parsed) {
+            const container = document.getElementById("resultsContainer");
+            const modelKey = parsed.model;
+            const versionLabel = CNCR_DATA.version[modelKey];
+            let outDesc;
+            let approvalDesc;
+            let mountDesc;
+            let connDesc;
+            if (parsed.family === "100") {
+                outDesc = CNCR_DATA.out100[parsed.out];
+                approvalDesc = CNCR_DATA.approvals100[parsed.approval];
+                mountDesc = CNCR_DATA.mount100[parsed.mount];
+                connDesc = CNCR_DATA.conn100[parsed.conn];
+            } else {
+                outDesc = CNCR_DATA.out200[parsed.out];
+                approvalDesc = CNCR_DATA.approvals200[parsed.approval];
+                mountDesc = CNCR_DATA.mount200[parsed.mount];
+                connDesc = CNCR_DATA.conn200[parsed.conn];
+            }
+            const { wireCount, protocol } = cncrWireAndProtocol(outDesc);
+            const additionalInfo = {
+                Model: versionLabel,
+                Approvals: approvalDesc,
+                Mounting: mountDesc,
+                Connection: connDesc,
+                Output: outDesc,
+            };
+            let html = `
+                <div class="protocol-box">
+                    <div class="protocol-title">CNCR — Important Information</div>
+                    <div class="protocol-main">${wireCount} ${protocol}</div>
+                    <div class="protocol-details" style="font-size: 18px; margin-top: 20px; opacity: 0.95;">
+                        <strong>Mounting:</strong><br>${mountDesc}
+                    </div>
+                </div>
+                <div class="additional-info"><h4>ETC</h4>`;
+            html += `
+                <div class="info-item">
+                    <div class="info-label">Serial number</div>
+                    <div class="info-value">${originalSerial}</div>
+                </div>`;
+            for (const [label, value] of Object.entries(additionalInfo)) {
+                html += `
+                    <div class="info-item">
+                        <div class="info-label">${label}</div>
+                        <div class="info-value">${value}</div>
+                    </div>`;
+            }
+            if (parsed.warnings && parsed.warnings.length) {
+                html += `<div class="info-item"><div class="info-label">Notes</div><div class="info-value">${parsed.warnings.join("<br>")}</div></div>`;
+            }
+            html += "</div>";
+            container.innerHTML = html;
+        }
+
+        function decodeCNCRSerial(originalSerial, cleanedSerial) {
+            const parsed = parseCNCRSerial(originalSerial, cleanedSerial);
+            if (parsed.error) {
+                showError(parsed.error);
+                return;
+            }
+            showCNCRDecoded(originalSerial, parsed);
+        }
+
         const CONFIG_DATA = {
             "MOUNTING": {
                 "XX": "No Mounting",
@@ -5522,6 +5478,49 @@
             }
         });
 
+        /**
+         * Normalize pasted NCR-86 payloads (same idea as flexible CNCR quoting).
+         * Longest-first prefix strip: NCR…86.2SW, NR86.2SW, NCR86, NR86, NCR.2SW, NR.2SW, NCR, NR; optional stray C; long paste → first 12 alphanumerics.
+         * Caller must skip when input is CNCR (starts with / contains CNCR per decodeSerial).
+         */
+        function extractNCR86Payload(cleaned) {
+            if (!cleaned || cleaned.startsWith('CNCR')) return null;
+            let s = cleaned;
+            let m;
+            // NCR-86.2SW… (e.g. NCR-86.2SWSDCKAADNFWAX) — must run before NCR86 / NCR.2SW / NCR
+            if ((m = s.match(/^NCR[\s\u00A0\-–—.\/]*86\.2SW/i))) {
+                s = s.substring(m[0].length);
+            } else if (s.startsWith('NR86.2SW')) {
+                s = s.substring(8);
+            } else if (s.startsWith('NCR86')) {
+                s = s.substring(5);
+            } else if (s.startsWith('NR86')) {
+                s = s.substring(4);
+            } else if ((m = s.match(/^NCR[\s\u00A0\-–—.\/]*2SW/i))) {
+                // e.g. NCR.2SWSDCKAADNFWAX (shorthand vs NCR86.2SW) — before plain NCR
+                s = s.substring(m[0].length);
+            } else if ((m = s.match(/^NR[\s\u00A0\-–—.\/]*2SW/i))) {
+                // e.g. NR.2SW… — before plain NR
+                s = s.substring(m[0].length);
+            } else if (s.startsWith('NCR')) {
+                s = s.substring(3);
+            } else if (s.startsWith('NR')) {
+                s = s.substring(2);
+            }
+            if (s.length === 13 && /^C[A-Z0-9]{12}$/.test(s)) {
+                s = s.substring(1);
+            }
+            if (s.length > 12) {
+                const only = s.replace(/[^A-Z0-9]/g, '');
+                if (only.length >= 12) s = only.substring(0, 12);
+            }
+            if (s.length !== 12 || !/^[A-Z0-9]{12}$/.test(s)) return null;
+            const knownPrefixes = Object.keys(PRODUCT_DATA);
+            const startsWithKnownPrefix = knownPrefixes.some((prefix) => s.startsWith(prefix));
+            if (startsWithKnownPrefix || s.startsWith('CNCR')) return null;
+            return s;
+        }
+
         function decodeSerial() {
             try {
                 let serial = document.getElementById('serialInput').value.trim().toUpperCase();
@@ -5532,31 +5531,20 @@
                     return;
                 }
 
-                // Remove separators first
-                const cleanedSerial = serial.replace(/-/g, '').replace(/ /g, '');
+                // Remove spaces and hyphens (ASCII + common Unicode dashes from PDF/Word)
+                const cleanedSerial = serial.replace(/[\s\u00A0\-–—\u2010-\u2015]/g, '');
                 
                 // Check if it's a CNCR serial number
                 const isCNCR = cleanedSerial.startsWith('CNCR') || originalSerial.toUpperCase().includes('CNCR');
                 
-                // Check if it's an NCR-86 serial number (more specific check)
+                // NCR-86: bare 12 chars, NR86.2SW…, NCR86…, NCR…, optional leading C, or longer paste (first 12 alphanumerics)
                 let isNCR = false;
-                let ncrSerial = cleanedSerial;
-                
-                // Check for NR86.2SW prefix
-                if (cleanedSerial.startsWith('NR86.2SW')) {
-                    isNCR = true;
-                    ncrSerial = cleanedSerial.substring(8);
-                }
-                // Check if it's exactly 12 characters and matches NCR-86 pattern (alphanumeric)
-                // But NOT if it starts with known product prefixes
-                else if (cleanedSerial.length === 12 && /^[A-Z0-9]{12}$/.test(cleanedSerial)) {
-                    // Make sure it's not a product prefix we know about
-                    const knownPrefixes = Object.keys(PRODUCT_DATA);
-                    const startsWithKnownPrefix = knownPrefixes.some(prefix => cleanedSerial.startsWith(prefix));
-                    
-                    if (!startsWithKnownPrefix && !cleanedSerial.startsWith('CNCR')) {
+                let ncrSerial = '';
+                if (!isCNCR) {
+                    const extracted = extractNCR86Payload(cleanedSerial);
+                    if (extracted) {
                         isNCR = true;
-                        ncrSerial = cleanedSerial;
+                        ncrSerial = extracted;
                     }
                 }
                 
@@ -5566,9 +5554,9 @@
                     return;
                 }
 
-                // Handle CNCR serial numbers
+                // Handle CNCR serial numbers (dedicated parser; not generic product tree)
                 if (isCNCR) {
-                    detectProductType(originalSerial, cleanedSerial);
+                    decodeCNCRSerial(originalSerial, cleanedSerial);
                     return;
                 }
 
@@ -5910,27 +5898,6 @@
             document.getElementById('serialInput').focus();
         }
 
-        function showExamples() {
-            document.getElementById('examplesModal').style.display = 'block';
-        }
-
-        function hideExamples() {
-            document.getElementById('examplesModal').style.display = 'none';
-        }
-
-        function useExample(serial) {
-            document.getElementById('serialInput').value = serial;
-            hideExamples();
-            decodeSerial();
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('examplesModal');
-            if (event.target === modal) {
-                hideExamples();
-            }
-        }
     </script>
 </body>
 </html>
