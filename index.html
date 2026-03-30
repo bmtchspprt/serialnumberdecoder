@@ -267,7 +267,7 @@
             <div class="input-section">
                 <h3>Enter Serial Number</h3>
                 <div class="input-hint">
-                    NCR-86: bare code, or prefix <code>NR</code>, <code>NCR</code>, <code>NR86</code>, <code>NCR86</code>, <code>NR.2SW</code>, <code>NCR.2SW</code>, <code>NR86.2SW</code>, <code>NCR86.2SW</code> / <code>NCR-86.2SW</code>, or a stray leading <code>C</code>. Hyphens/dashes/spaces are ignored. CNCR: e.g. <code>CNCR-190.FRXXXMBWB</code>. Other prefixes use the product tree.
+                    NCR-86: bare code, or prefix <code>NR</code>, <code>NCR</code>, <code>NR86</code>, <code>NCR86</code>, <code>NR.2SW</code>, <code>NCR.2SW</code>, <code>NR86.2SW</code>, <code>NCR86.2SW</code> / <code>NCR-86.2SW</code>, or a stray leading <code>C</code>. <strong>LTX/BTX:</strong> <code>LTX1.…</code> / <code>BTX1.…</code> (or <code>LTX-100</code>, <code>LTX1</code>, same for BTX) plus five option letters/digits — hyphens, spaces, and dots are ignored. CNCR: e.g. <code>CNCR-190.FRXXXMBWB</code>. Other prefixes use the product tree.
                 </div>
                 <div class="input-group">
                     <input type="text" id="serialInput" placeholder="Enter serial number here..." autofocus>
@@ -5371,6 +5371,164 @@
             showCNCRDecoded(originalSerial, parsed);
         }
 
+        // LTX-100 / BTX-100 order numbers (LTX1. / BTX1. + 5 option characters). Same flexible paste idea as NCR.
+        const LTX_BTX_DATA = {
+            product: {
+                LTX1: "LTX-100 — Connectivity device",
+                BTX1: "BTX-100 — BinTrac gateway",
+            },
+            power: {
+                X: "No cable — 24 VDC power supply required by customer",
+                W: "With 110 VAC to 24 VDC wall wart",
+            },
+            comm: {
+                X: "No Cell or Ethernet",
+                C: "Cell connectivity only",
+                E: "Ethernet only",
+                R: "(Redundancy) Cell and Ethernet",
+            },
+            connections: {
+                "1": 'One 3/8" cord grip',
+                "2": 'Two 3/8" cord grips',
+                "3": 'Three 3/8" cord grips',
+            },
+            expansion: {
+                X: "No expansion card",
+                H: "HART expansion card",
+                F: "4–20 mA (4 inputs)",
+                B: "BinTrac input/output card",
+                A: "4–20 mA output",
+                M: "Modbus expansion card",
+                R: "Relay input/output",
+            },
+        };
+
+        function extractLTXBTXPayload(cleaned) {
+            if (!cleaned) return null;
+            const s = cleaned.replace(/[^A-Z0-9]/g, "").toUpperCase();
+            if (s.startsWith("CNCR")) return null;
+            let family = null;
+            let rest = "";
+            if (s.startsWith("LTX100")) {
+                family = "LTX1";
+                rest = s.substring(6);
+            } else if (s.startsWith("LTX1")) {
+                family = "LTX1";
+                rest = s.substring(4);
+            } else if (s.startsWith("BTX100")) {
+                family = "BTX1";
+                rest = s.substring(6);
+            } else if (s.startsWith("BTX1")) {
+                family = "BTX1";
+                rest = s.substring(4);
+            } else {
+                let m = s.match(/LTX100([A-Z0-9]{5})/i);
+                if (m) {
+                    family = "LTX1";
+                    rest = m[1];
+                } else if ((m = s.match(/LTX1([A-Z0-9]{5})/i))) {
+                    family = "LTX1";
+                    rest = m[1];
+                } else if ((m = s.match(/BTX100([A-Z0-9]{5})/i))) {
+                    family = "BTX1";
+                    rest = m[1];
+                } else if ((m = s.match(/BTX1([A-Z0-9]{5})/i))) {
+                    family = "BTX1";
+                    rest = m[1];
+                } else {
+                    return null;
+                }
+            }
+            if (rest.length < 5) return null;
+            let extra = "";
+            if (rest.length > 5) {
+                extra = rest.substring(5);
+                rest = rest.substring(0, 5);
+            }
+            return { family, suffix: rest, extra };
+        }
+
+        function decodeLTXBTXSerial(originalSerial, parsed) {
+            const { family, suffix, extra } = parsed;
+            const p = suffix[0];
+            const c = suffix[1];
+            const conn = suffix[2];
+            const e1 = suffix[3];
+            const e2 = suffix[4];
+            const errors = [];
+            if (!LTX_BTX_DATA.power[p]) errors.push(`Invalid power code “${p}”. Valid: ${Object.keys(LTX_BTX_DATA.power).join(", ")}.`);
+            if (!LTX_BTX_DATA.comm[c]) errors.push(`Invalid communication code “${c}”. Valid: ${Object.keys(LTX_BTX_DATA.comm).join(", ")}.`);
+            if (!LTX_BTX_DATA.connections[conn]) errors.push(`Invalid connections code “${conn}”. Valid: ${Object.keys(LTX_BTX_DATA.connections).join(", ")}.`);
+            if (!LTX_BTX_DATA.expansion[e1]) errors.push(`Invalid expansion port 1 code “${e1}”. Valid: ${Object.keys(LTX_BTX_DATA.expansion).join(", ")}.`);
+            if (!LTX_BTX_DATA.expansion[e2]) errors.push(`Invalid expansion port 2 code “${e2}”. Valid: ${Object.keys(LTX_BTX_DATA.expansion).join(", ")}.`);
+            if (errors.length) {
+                showError(errors.join("<br>"));
+                return;
+            }
+            showLTXBTXDecoded(originalSerial, {
+                family,
+                suffix,
+                extra,
+                power: p,
+                comm: c,
+                connections: conn,
+                exp1: e1,
+                exp2: e2,
+            });
+        }
+
+        function showLTXBTXDecoded(originalSerial, d) {
+            const container = document.getElementById("resultsContainer");
+            const productTitle = LTX_BTX_DATA.product[d.family];
+            const summary = `${LTX_BTX_DATA.power[d.power]} · ${LTX_BTX_DATA.comm[d.comm]}`;
+            let html = `
+                <div class="protocol-box">
+                    <div class="protocol-title">LTX / BTX — Order configuration</div>
+                    <div class="protocol-main">${productTitle}</div>
+                    <div class="protocol-details" style="font-size: 18px; margin-top: 20px; opacity: 0.95;">
+                        ${summary}
+                    </div>
+                </div>
+                <div class="additional-info"><h4>ETC</h4>
+                <div class="info-item">
+                    <div class="info-label">Entered value</div>
+                    <div class="info-value">${originalSerial}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Base part number</div>
+                    <div class="info-value">${d.family}.</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Power (${d.power})</div>
+                    <div class="info-value">${LTX_BTX_DATA.power[d.power]}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Communication (${d.comm})</div>
+                    <div class="info-value">${LTX_BTX_DATA.comm[d.comm]}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Connections (${d.connections})</div>
+                    <div class="info-value">${LTX_BTX_DATA.connections[d.connections]}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Expansion port 1 (${d.exp1})</div>
+                    <div class="info-value">${LTX_BTX_DATA.expansion[d.exp1]}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Expansion port 2 (${d.exp2})</div>
+                    <div class="info-value">${LTX_BTX_DATA.expansion[d.exp2]}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Option string</div>
+                    <div class="info-value">${d.suffix}</div>
+                </div>`;
+            if (d.extra && d.extra.length) {
+                html += `<div class="info-item"><div class="info-label">Extra characters (ignored)</div><div class="info-value">${d.extra}</div></div>`;
+            }
+            html += "</div>";
+            container.innerHTML = html;
+        }
+
         const CONFIG_DATA = {
             "MOUNTING": {
                 "XX": "No Mounting",
@@ -5536,6 +5694,15 @@
                 
                 // Check if it's a CNCR serial number
                 const isCNCR = cleanedSerial.startsWith('CNCR') || originalSerial.toUpperCase().includes('CNCR');
+                
+                // LTX-100 / BTX-100 order numbers (LTX1.… / BTX1.… + 5 option chars) — before NCR
+                if (!isCNCR) {
+                    const ltxBtx = extractLTXBTXPayload(cleanedSerial);
+                    if (ltxBtx) {
+                        decodeLTXBTXSerial(originalSerial, ltxBtx);
+                        return;
+                    }
+                }
                 
                 // NCR-86: bare 12 chars, NR86.2SW…, NCR86…, NCR…, optional leading C, or longer paste (first 12 alphanumerics)
                 let isNCR = false;
