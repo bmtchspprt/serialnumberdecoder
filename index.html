@@ -267,7 +267,7 @@
             <div class="input-section">
                 <h3>Enter Serial Number</h3>
                 <div class="input-hint">
-                    NCR-86: bare code, or prefix <code>NR</code>, <code>NCR</code>, <code>NR86</code>, <code>NCR86</code>, <code>NR.2SW</code>, <code>NCR.2SW</code>, <code>NR86.2SW</code>, <code>NCR86.2SW</code> / <code>NCR-86.2SW</code>, or a stray leading <code>C</code>. <strong>LTX/BTX:</strong> <code>LTX1.…</code> / <code>BTX1.…</code> (or <code>LTX-100</code>, <code>LTX1</code>, same for BTX) plus five option letters/digits — hyphens, spaces, and dots are ignored. CNCR: e.g. <code>CNCR-190.FRXXXMBWB</code>. Other prefixes use the product tree.
+                    Paste a serial or order number as it appears on your paperwork—extra labels, hyphens, and dots are usually fine.
                 </div>
                 <div class="input-group">
                     <input type="text" id="serialInput" placeholder="Enter serial number here..." autofocus>
@@ -5373,10 +5373,6 @@
 
         // LTX-100 / BTX-100 order numbers (LTX1. / BTX1. + 5 option characters). Same flexible paste idea as NCR.
         const LTX_BTX_DATA = {
-            product: {
-                LTX1: "LTX-100 — Connectivity device",
-                BTX1: "BTX-100 — BinTrac gateway",
-            },
             power: {
                 X: "No cable — 24 VDC power supply required by customer",
                 W: "With 110 VAC to 24 VDC wall wart",
@@ -5385,7 +5381,7 @@
                 X: "No Cell or Ethernet",
                 C: "Cell connectivity only",
                 E: "Ethernet only",
-                R: "(Redundancy) Cell and Ethernet",
+                R: "Ethernet and Cellular Capable",
             },
             connections: {
                 "1": 'One 3/8" cord grip',
@@ -5402,6 +5398,21 @@
                 R: "Relay input/output",
             },
         };
+
+        /** Main headline from communication code (cellular first when applicable). */
+        function ltxBtxMainHeadline(d) {
+            const c = d.comm;
+            if (d.family === "LTX1") {
+                if (c === "C") return "LTX-100 — Cellular Type";
+                if (c === "R") return "LTX-100 — Ethernet and Cellular";
+                if (c === "E") return "LTX-100 — Ethernet";
+                return "LTX-100 — Connectivity device";
+            }
+            if (c === "C") return "BTX-100 — BinTrac Cellular";
+            if (c === "E") return "BTX-100 — BinTrac Ethernet";
+            if (c === "R") return "BTX-100 — BinTrac Cellular and Ethernet";
+            return "BTX-100 — BinTrac";
+        }
 
         function extractLTXBTXPayload(cleaned) {
             if (!cleaned) return null;
@@ -5479,13 +5490,21 @@
 
         function showLTXBTXDecoded(originalSerial, d) {
             const container = document.getElementById("resultsContainer");
-            const productTitle = LTX_BTX_DATA.product[d.family];
-            const summary = `${LTX_BTX_DATA.power[d.power]} · ${LTX_BTX_DATA.comm[d.comm]}`;
+            const mainHeadline = ltxBtxMainHeadline(d);
+            const exp1 = LTX_BTX_DATA.expansion[d.exp1];
+            const exp2 = LTX_BTX_DATA.expansion[d.exp2];
+            const summary = `${LTX_BTX_DATA.comm[d.comm]} · ${LTX_BTX_DATA.power[d.power]} · ${LTX_BTX_DATA.connections[d.connections]}`;
             let html = `
                 <div class="protocol-box">
-                    <div class="protocol-title">LTX / BTX — Order configuration</div>
-                    <div class="protocol-main">${productTitle}</div>
-                    <div class="protocol-details" style="font-size: 18px; margin-top: 20px; opacity: 0.95;">
+                    <div class="protocol-main">${mainHeadline}</div>
+                    <div class="protocol-details" style="font-size: 18px; margin-top: 18px; opacity: 0.98; text-align: left;">
+                        <strong>Expansion port 1 (${d.exp1})</strong><br>${exp1}
+                    </div>
+                    <div class="protocol-details" style="font-size: 18px; margin-top: 14px; opacity: 0.98; text-align: left;">
+                        <strong>Expansion port 2 (${d.exp2})</strong><br>${exp2}
+                    </div>
+                    <div class="protocol-title" style="margin-top: 18px;">LTX-100 / BTX-100 — Order configuration</div>
+                    <div class="protocol-details" style="font-size: 17px; margin-top: 12px; opacity: 0.95;">
                         ${summary}
                     </div>
                 </div>
@@ -5499,24 +5518,24 @@
                     <div class="info-value">${d.family}.</div>
                 </div>
                 <div class="info-item">
-                    <div class="info-label">Power (${d.power})</div>
-                    <div class="info-value">${LTX_BTX_DATA.power[d.power]}</div>
+                    <div class="info-label">Expansion port 1 (${d.exp1})</div>
+                    <div class="info-value">${exp1}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Expansion port 2 (${d.exp2})</div>
+                    <div class="info-value">${exp2}</div>
                 </div>
                 <div class="info-item">
                     <div class="info-label">Communication (${d.comm})</div>
                     <div class="info-value">${LTX_BTX_DATA.comm[d.comm]}</div>
                 </div>
                 <div class="info-item">
+                    <div class="info-label">Power (${d.power})</div>
+                    <div class="info-value">${LTX_BTX_DATA.power[d.power]}</div>
+                </div>
+                <div class="info-item">
                     <div class="info-label">Connections (${d.connections})</div>
                     <div class="info-value">${LTX_BTX_DATA.connections[d.connections]}</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Expansion port 1 (${d.exp1})</div>
-                    <div class="info-value">${LTX_BTX_DATA.expansion[d.exp1]}</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Expansion port 2 (${d.exp2})</div>
-                    <div class="info-value">${LTX_BTX_DATA.expansion[d.exp2]}</div>
                 </div>
                 <div class="info-item">
                     <div class="info-label">Option string</div>
